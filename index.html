@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Responsive Pinterest-Like Cards</title>
+  <title>Responsive View Toggle (Cards & Table)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -25,6 +25,10 @@
       <img src="icons/filter.svg" class="icon filter-icon" alt="Filter by Discipline">
       <img src="icons/sort.svg" class="icon sort-icon" alt="Sort by Discipline">
 
+      <!-- View toggle icons -->
+      <img src="icons/grid.svg" class="icon grid-view-icon" alt="Grid View">
+      <img src="icons/list.svg" class="icon list-view-icon" alt="List View">
+
       <div class="filter-dropdown">
         <select class="filter-select">
           <option value="All">All Disciplines</option>
@@ -34,6 +38,21 @@
   </div>
 
   <div class="container"></div>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th class="name">Name</th>
+          <th class="date">Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-body"></tbody>
+    </table>
+  </div>
 
   <script src="script.js"></script>
 </body>
