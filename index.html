@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Responsive Pinterest-Like Cards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="header">
+    <h2>Templates</h2>
+    <div class="toolbar">
+      <div class="search-container">
+        <img src="icons/search.svg" class="icon search-icon" alt="Search">
+        <input type="text" class="search-input" placeholder="Search..."/>
+        <img src="icons/close.svg" class="icon search-close" alt="Close">
+      </div>
+
+      <img src="icons/filter.svg" class="icon filter-icon" alt="Filter by Discipline">
+      <img src="icons/sort.svg" class="icon sort-icon" alt="Sort by Discipline">
+
+      <div class="filter-dropdown">
+        <select class="filter-select">
+          <option value="All">All Disciplines</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
