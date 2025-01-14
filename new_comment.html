@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add New Demo</title>
+
+  <!-- Google Font “Inter” -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --border-radius: 8px;
+      --color-muted:   #A1A9BB;
+      --color-text:    #1E1E1E;
+      --color-primary: #2A2DFF;
+
+      /* Card design tokens */
+      --card-bg:       #F7F7FC;      
+      --card-border:   #7D7FFF;      
+      --rotate-start:  rgba(124, 126, 243, 0);
+      --rotate-mid:    rgba(92, 94, 240, 0.75);
+      --rotate-end:    rgba(120, 122, 248, 0);
+
+      /* Step2 background */
+      --input-bg-step2: #FAFAFA;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .app {
+      width: 420px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ======================
+       INPUT CONTAINER
+    =======================*/
+    .input-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      overflow: hidden;
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+      border: none;
+      background: transparent;
+      transition: background 0.3s, border 0.3s;
+    }
+    .top-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 8px 16px;
+      flex-wrap: wrap;
+    }
+    .plus-btn {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: none;
+      color: var(--color-muted);
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      transform: rotate(0deg);
+      transition: transform 0.3s, color 0.3s;
+      padding: 0;
+      flex-shrink: 0;
+      margin-top: -1px;
+    }
+    textarea {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--color-muted);
+      font-size: 14px;
+      line-height: 1.3;
+      resize: none;
+      padding: 0;
+      margin: 4px 0 0 0;
+      overflow: auto;
+    }
+    .buttons-row {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding-right: 8px;
+      width: 100%;
+      margin-top: 8px;
+      margin-left: 40px;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid #E0E3EB;
+      background: #F8F9FF;
+      color: var(--color-text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .action-btn.primary {
+      background: #FFFFFF;
+    }
+    .action-btn:hover {
+      background: #EFEFFF;
+      border-color: var(--color-primary);
+    }
+    .icon-block {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #F0F1FA;
+      border-radius: 4px;
+      padding: 2px 4px;
+      font-size: 14px;
+      color: var(--color-primary);
+      border: 1px solid #E0E3EB;
+    }
+
+    /* Step2 background + neutral bottom border */
+    .input-container.step2 {
+      background: var(--input-bg-step2); /* #FAFAFA */
+      border-bottom: 2px solid #E8E8E8;
+    }
+    /* If user typed > 1 char => show buttons */
+    .input-container.step2.has-content .buttons-row {
+      display: flex;
+    }
+    .input-container.step2 .plus-btn {
+      transform: rotate(45deg);
+      color: var(--color-primary);
+    }
+    .input-container.step2 textarea {
+      color: var(--color-text);
+    }
+
+    /*
+      1) ADDITIONAL RULE:
+         if user typed > 1 char => .has-content => plus => #2A2DFF,
+         also border => #2A2DFF
+    */
+    .input-container.step2.has-content {
+      border-bottom: 2px solid var(--color-primary); /* #2A2DFF */
+    }
+
+    /* ============= 
+       LOADING CARD 
+    ============== */
+    .card {
+      width: 420px;
+      max-width: 100%;
+      margin: 0;
+      border-radius: var(--border-radius);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card .inner {
+      position: relative;
+      z-index: 1;      
+      width: 100%;
+      margin: 1.5px;  
+      border-radius: var(--border-radius);
+      background: var(--card-bg);
+      color: #000000;            
+      padding: 16px;
+      border: 0.5px solid var(--card-border);
+      font-size: 14px;
+    }
+
+    /* Example 2 rotating rectangle */
+    .example-2 .inner {
+      margin: 1.5px;
+    }
+    .example-2::before {
+      content: "";
+      display: block;
+      background: linear-gradient(
+        90deg,
+        var(--rotate-start) 0%,
+        var(--rotate-mid)   50%,
+        var(--rotate-end)   100%
+      );
+      height: 300px;
+      width: 100px;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      transform-origin: top center;
+      transform: translateY(-50%) rotate(0deg);
+      animation: rotate 5s linear infinite;
+      z-index: 0;
+    }
+    @keyframes rotate {
+      0%   { transform: translateY(-50%) rotate(0deg); }
+      100% { transform: translateY(-50%) rotate(360deg); }
+    }
+    .card.done::before {
+      animation-play-state: paused;
+    }
+
+    .final-buttons {
+      display: none;  
+      margin-top: 16px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* Animated dots for lines */
+    .dot {
+      opacity: 0;
+      animation: dot-flash 1.4s infinite;
+    }
+    .dot:nth-child(1) { animation-delay: 0s; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot-flash {
+      0%   { opacity: 0; }
+      50%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+  <!-- STEP 1/2: Input container -->
+  <div id="inputContainer" class="input-container step1" onclick="handleContainerClick()">
+    <div class="top-row">
+      <button id="plusBtn" class="plus-btn" type="button" onclick="togglePlus(event)">+</button>
+      <textarea
+        id="myTextarea"
+        rows="1"
+        placeholder="Add New ✨"
+      ></textarea>
+      <div class="buttons-row" id="buttonsRow">
+        <button class="action-btn primary" onclick="showResultCard()">
+          Add with Ichi
+          <span class="icon-block">⏎</span>
+        </button>
+        <button class="action-btn" onclick="showResultCard()">
+          Add as is
+          <span class="icon-block">⌘⏎</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Rotating loading card -->
+  <div id="resultsCard" class="card example-2">
+    <div class="inner" id="cardInner">
+      <p id="loadingText" style="margin:0;padding:0;">
+        Working on it<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+      </p>
+
+      <!-- Accept/Cancel after final text -->
+      <div class="final-buttons" id="finalButtons">
+        <button class="action-btn" onclick="onAcceptClick()">
+          Accept 
+          <span class="icon-block">⏎</span>
+        </button>
+        <button class="action-btn" onclick="onCancelClick()">
+          Cancel
+          <span class="icon-block">ESC</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const inputContainer = document.getElementById("inputContainer");
+  const myTextarea     = document.getElementById("myTextarea");
+  const buttonsRow     = document.getElementById("buttonsRow");
+
+  const resultsCard    = document.getElementById("resultsCard");
+  const loadingText    = document.getElementById("loadingText");
+  const finalButtons   = document.getElementById("finalButtons");
+
+  let isStep2     = false;  // Are we in Step2?
+  let cardVisible = false;  // Is the card shown?
+  let hasFinished = false;  // If user completed once => "follow-up instructions..." placeholder
+
+  function handleContainerClick() {
+    if (!isStep2) activateStep2();
+  }
+
+  myTextarea.addEventListener("input", () => {
+    if (!isStep2) {
+      activateStep2();
+    }
+    // Check length
+    const valLen = myTextarea.value.trim().length;
+    if (valLen > 1) {
+      inputContainer.classList.add("has-content");
+    } else {
+      inputContainer.classList.remove("has-content");
+    }
+  });
+
+  function activateStep2() {
+    isStep2 = true;
+    inputContainer.classList.add("step2");
+    inputContainer.classList.remove("step1");
+    myTextarea.focus();
+  }
+
+  function togglePlus(e) {
+    e.stopPropagation();
+    if (!isStep2) {
+      activateStep2();
+    } else {
+      resetToStep1();
+    }
+  }
+
+  function resetToStep1() {
+    isStep2 = false;
+    inputContainer.classList.remove("step2", "has-content");
+    inputContainer.classList.add("step1");
+
+    myTextarea.value = "";
+    myTextarea.placeholder = hasFinished
+      ? "follow-up instructions..."
+      : "Add New ✨";
+
+    if (cardVisible) {
+      resultsCard.classList.remove("show", "done");
+      resultsCard.classList.remove("example-2");
+      void resultsCard.offsetWidth;
+      resultsCard.classList.add("example-2");
+      cardVisible = false;
+      
+      finalButtons.style.display = "none";
+    }
+  }
+
+  function showResultCard() {
+    if (!isStep2) activateStep2();
+    if (cardVisible) return;
+
+    cardVisible = true;
+    resultsCard.classList.add("show");
+    buttonsRow.style.display = "none";
+
+    const lines = [
+      "Reviewing building codes...",
+      "Looking into structural chapters...",
+      "Exploring relevant sections...",
+      "Summarizing details..."
+    ];
+    let index = 0;
+    loadingText.textContent = lines[index];
+
+    const interval = setInterval(() => {
+      index++;
+      if (index < lines.length) {
+        loadingText.textContent = lines[index];
+      } else {
+        clearInterval(interval);
+      }
+    }, 1250);
+
+    setTimeout(() => {
+      loadingText.textContent =
+        "This is your perfect code comment that may be used in the future";
+      resultsCard.classList.add("done");
+      resultsCard.classList.remove("example-2");
+
+      finalButtons.style.display = "flex";
+
+      hasFinished = true;
+      resetFinalStep();
+    }, 5000);
+  }
+
+  function resetFinalStep() {
+    resultsCard.classList.add("show");
+    isStep2 = false;
+    inputContainer.classList.remove("step2", "has-content");
+    inputContainer.classList.add("step1");
+    myTextarea.value = "";
+    myTextarea.placeholder = "follow-up instructions...";
+  }
+
+  myTextarea.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      showResultCard();
+    }
+  });
+
+  function onAcceptClick() {
+    alert("You clicked Accept!");
+    resetToStep1();
+  }
+  function onCancelClick() {
+    alert("You clicked Cancel!");
+    resetToStep1();
+  }
+</script>
+
+</body>
+</html>
